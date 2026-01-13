@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>มีคำถามจะถาม...</title>
+    <link href="https://fonts.googleapis.com/css2?family=Mali:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Mali', cursive;
+            background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* หัวใจลอยพื้นหลัง */
+        .bg-heart {
+            position: absolute;
+            color: rgba(255, 182, 193, 0.4);
+            font-size: 2rem;
+            animation: float 6s linear infinite;
+            z-index: 0;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
+        }
+
+        .container {
+            text-align: center;
+            z-index: 10;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(255, 107, 107, 0.2);
+            max-width: 90%;
+            border: 2px solid #fff;
+        }
+
+        .cute-gif {
+            width: 200px;
+            height: auto;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            animation: heartbeat 1.5s infinite;
+        }
+
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            15% { transform: scale(1.05); }
+            30% { transform: scale(1); }
+            45% { transform: scale(1.05); }
+            60% { transform: scale(1); }
+            100% { transform: scale(1); }
+        }
+
+        h1 {
+            color: #ff6b6b;
+            font-size: 2.2rem;
+            margin-bottom: 30px;
+        }
+
+        .btn-group {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        button {
+            font-family: 'Mali', cursive;
+            padding: 12px 35px;
+            font-size: 1.2rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-yes {
+            background-color: #ff6b6b;
+            color: white;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+        }
+
+        .btn-yes:hover {
+            transform: scale(1.1);
+            background-color: #ff4757;
+        }
+
+        .btn-no {
+            background-color: #e2e2e2;
+            color: #666;
+            position: relative;
+        }
+
+        .success-message {
+            display: none;
+            margin-top: 20px;
+            color: #ff4757;
+            animation: fadeIn 1s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .success-note {
+            font-size: 0.9rem;
+            color: #777;
+            background: #fff3cd;
+            padding: 10px;
+            border-radius: 10px;
+            margin-top: 15px;
+            border: 1px dashed #ffcc00;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div id="bg-hearts"></div>
+
+    <div class="container">
+        <img src="download.gif" alt="Cute Request" class="cute-gif">
+        
+        <h1 id="question">เป็นแฟนกันนะ?</h1>
+        
+        <div class="btn-group">
+            <button class="btn-yes" onclick="sheSaidYes()">ตกลง</button>
+            <button class="btn-no" onmouseover="moveButton(this)" ontouchstart="moveButton(this)">ไม่เอา</button>
+        </div>
+
+        <div class="success-message" id="successMsg">
+            <h2>เย้! ขอบคุณนะ ❤️</h2>
+            <p>เค้ารักเธอที่สุดเลย!</p>
+            
+            <div class="success-note">
+                📂 ระบบกำลังดาวน์โหลดไฟล์คำตอบ...<br>
+                <b>ส่งไฟล์ "Answer_For_You.txt" กลับมาให้เค้าด้วยนะ!</b>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // สร้างหัวใจพื้นหลัง
+        function createHearts() {
+            const container = document.getElementById('bg-hearts');
+            for(let i=0; i<15; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'bg-heart';
+                heart.innerHTML = '❤️';
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.animationDuration = (Math.random() * 3 + 3) + 's';
+                heart.style.animationDelay = Math.random() * 5 + 's';
+                container.appendChild(heart);
+            }
+        }
+        createHearts();
+
+        // ปุ่มหนี
+        function moveButton(btn) {
+            const width = window.innerWidth - 100;
+            const height = window.innerHeight - 100;
+            
+            const newX = Math.max(20, Math.random() * width);
+            const newY = Math.max(20, Math.random() * height);
+
+            btn.style.position = 'fixed';
+            btn.style.left = newX + 'px';
+            btn.style.top = newY + 'px';
+        }
+
+        // ฟังก์ชันสร้างไฟล์ Text และดาวน์โหลด
+        function downloadAnswer() {
+            // เนื้อหาในไฟล์ Text
+            const content = `
+===================================
+      OFFICIAL ANSWER CERTIFICATE
+===================================
+
+ฉันตกลงเป็นแฟนกับเธอแล้วนะ! ❤️
+(She said YES!)
+
+วันที่กดตอบ: ${new Date().toLocaleString('th-TH')}
+รักนะจุ๊บๆ 😘
+
+===================================
+`;
+            // สร้างไฟล์ Blob
+            const blob = new Blob([content], { type: 'text/plain' });
+            const url = window.URL.createObjectURL(blob);
+            
+            // สร้าง Link หลอกๆ เพื่อกดดาวน์โหลด
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'Answer_For_You.txt'; // ชื่อไฟล์ที่จะได้
+            document.body.appendChild(a);
+            a.click();
+            
+            // ล้างค่า
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+        }
+
+        // เมื่อกดตกลง
+        function sheSaidYes() {
+            // 1. จุดพลุ
+            var duration = 3 * 1000;
+            var end = Date.now() + duration;
+
+            (function frame() {
+                confetti({
+                    particleCount: 5, angle: 60, spread: 55, origin: { x: 0 },
+                    colors: ['#ff6b6b', '#ff4757', '#ffffff']
+                });
+                confetti({
+                    particleCount: 5, angle: 120, spread: 55, origin: { x: 1 },
+                    colors: ['#ff6b6b', '#ff4757', '#ffffff']
+                });
+
+                if (Date.now() < end) {
+                    requestAnimationFrame(frame);
+                }
+            }());
+
+            // 2. เปลี่ยน UI
+            document.querySelector('.btn-group').style.display = 'none';
+            document.getElementById('question').style.display = 'none';
+            document.getElementById('successMsg').style.display = 'block';
+            
+            // เปลี่ยนรูปเป็นรูปดีใจ (ถ้ามี)
+            // document.querySelector('.cute-gif').src = "URL_รูปใหม่";
+
+            // 3. เรียกฟังก์ชันดาวน์โหลดไฟล์
+            setTimeout(downloadAnswer, 1500); // รอ 1.5 วินาทีแล้วโหลดไฟล์
+        }
+    </script>
+</body>
+</html>
